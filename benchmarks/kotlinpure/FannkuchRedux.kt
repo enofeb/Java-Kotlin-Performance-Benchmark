@@ -13,6 +13,7 @@ package benchmarks.kotlinpure
 import java.util.concurrent.atomic.AtomicInteger
 
 object FannkuchRedux {
+
     fun fannkuch(n: Int): Pair<Int, Int> {
         val permutation = IntArray(n) { it } //Ascending array of n elements
         val flipPerm = IntArray(n) //The permutation to be flipped
@@ -71,9 +72,10 @@ object FannkuchRedux {
         }
     }
 
-    fun runBenchmark(args: Array<String>) {
-        val n: Int = if (args.isNotEmpty()) args[0].toInt() else 7
-        val (checksum, maxRotations) = FannkuchRedux.fannkuch(n)
-        println("$checksum\nPfannkuchen($n) = $maxRotations")
+    @JvmStatic
+    fun main(args: Array<String>) {
+      //  val n: Int = if (args.isNotEmpty()) args[0].toInt() else 7
+        val (checksum, maxRotations) = FannkuchRedux.fannkuch(7)
+        println("$checksum\nPfannkuchen(7) = $maxRotations")
     }
 }

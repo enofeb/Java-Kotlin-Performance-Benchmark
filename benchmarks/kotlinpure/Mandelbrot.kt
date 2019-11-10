@@ -54,7 +54,7 @@ object Mandelbrot {
 
     @Throws(Exception::class)
     @JvmStatic
-    fun execute(args: Array<String>) {
+    fun main(args: Array<String>) {
         var N = 6000
         if (args.size >= 1) N = Integer.parseInt(args[0])
 

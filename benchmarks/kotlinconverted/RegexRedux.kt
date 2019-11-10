@@ -18,15 +18,19 @@ import java.util.stream.Collectors.*
 
 object RegexRedux {
 
-  /*  @Throws(IOException::class)
+    @Throws(IOException::class)
     @JvmStatic
     fun main(args: Array<String>) {
+
+        val stream = FileInputStream("/Users/enes/Documents/intelljprojects/src/regex.txt")
+
         val baos = ByteArrayOutputStream()
         run {
             val buf = ByteArray(65536)
             var count: Int
-            while ((count = System.`in`.read(buf)) > 0) {
-                baos.write(buf, 0, count)
+            while ((stream.read(buf)) > 0) {
+                baos.write(buf, 0, 10245)
+
             }
         }
         val input = baos.toString("US-ASCII")
@@ -49,15 +53,14 @@ object RegexRedux {
             "agggtaa[cgt]|[acg]ttaccct"
         )
 
-        val counts = { v, s ->
-            //Java 9 Matcher.results isn't off by one
+        fun patternEntry(v:String,s:String):AbstractMap.SimpleEntry<String, Long>{
             val count = Pattern.compile(v).splitAsStream(s).count() - 1
-            AbstractMap.SimpleEntry<String, Long>(v, count)
+            return AbstractMap.SimpleEntry<String, Long>(v, count)
         }
 
         val results = variants.parallelStream()
-            .map<Entry<String, Long>> { variant -> counts.apply(variant, sequence) }
-            .collect<Map<String, Long>, Any>(toMap(Function { it.key }, Function { it.value }))
+            .map { variant -> patternEntry(variant,sequence) }
+            .collect(toMap({ return@toMap it.key }, AbstractMap.SimpleEntry<String, Long>::value))
 
         variants.forEach { variant -> println(variant + " " + results[variant]) }
 
@@ -79,5 +82,5 @@ object RegexRedux {
         println(initialLength)
         println(codeLength)
         println(buf.length)
-    }*/
+    }
 }

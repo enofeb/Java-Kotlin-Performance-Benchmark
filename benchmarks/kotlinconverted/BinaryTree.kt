@@ -5,21 +5,16 @@ import com.sun.source.tree.Tree
 
 object BinaryTree {
 
-    private val minDepth = 4
-   //private lateinit var treeNode:TreeNode
-
+    private val minDepth = 8
 
     @JvmStatic
-     fun main(args: Array<String>) {
+    fun main(args: Array<String>) {
 
         var n = 0
         if (args.size > 0) n = Integer.parseInt(args[0])
 
         val maxDepth = if (minDepth + 2 > n) minDepth + 2 else n
         val stretchDepth = maxDepth + 1
-
-        //treeNode=TreeNode(null,null)
-
 
         var check = TreeNode.bottomUpTree(stretchDepth).itemCheck()
         println("stretch tree of depth $stretchDepth\t check: $check")
@@ -37,39 +32,19 @@ object BinaryTree {
             println("$iterations\t trees of depth $depth\t check: $check")
             depth += 2
         }
-       println("long lived tree of depth " + maxDepth + "\t check: " + longLivedTree.itemCheck())
+        println("long lived tree of depth " + maxDepth + "\t check: " + longLivedTree.itemCheck())
 
     }
 
 
     private class TreeNode internal constructor(private val left: TreeNode?, private val right: TreeNode?) {
 
-        companion object{
-            fun a() : Int = 1
-           internal fun bottomUpTree(depth: Int):TreeNode=  if(depth > 0) TreeNode(bottomUpTree(depth - 1), bottomUpTree(depth - 1)) else TreeNode(null, null)
-          //  fun itemCheck():Int= if (left == null) 1 else 1 + left.itemCheck() + right!!.itemCheck()
+        companion object {
+            internal fun bottomUpTree(depth: Int): TreeNode =
+                if (depth > 0) TreeNode(bottomUpTree(depth - 1), bottomUpTree(depth - 1)) else TreeNode(null, null)
         }
 
-     /*   private fun bottomUpTree(depth: Int): TreeNode {
-            return if (depth > 0) {
-                TreeNode(
-                    bottomUpTree(depth - 1), bottomUpTree(depth - 1)
-                )
-            } else {
-                TreeNode(null, null)
-            }
-        }*/
-
-       internal fun itemCheck():Int= if (left == null) 1 else 1 + left.itemCheck() + right!!.itemCheck()
-
-
-      /*  private fun itemCheck(): Int {
-            // if necessary deallocate here
-            return if (left == null)
-                1
-            else
-                1 + left.itemCheck() + right!!.itemCheck()
-        }*/
+        internal fun itemCheck(): Int = if (left == null) 1 else 1 + left.itemCheck() + right!!.itemCheck()
     }
 
 }

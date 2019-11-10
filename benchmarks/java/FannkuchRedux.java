@@ -52,7 +52,7 @@ public  class FannkuchRedux
             // Use incremental change to generate another permutation
             while (true) {
                 if (r == n) {
-                  //  System.out.println( checksum );
+                    System.out.println( checksum );
                     return maxFlipsCount;
                 }
                 int perm0 = perm1[0];
@@ -74,7 +74,7 @@ public  class FannkuchRedux
     }
 
     public static void main(String[] args){
-        int n = 5;
+        int n = 7;
         if (args.length > 0) n = Integer.parseInt(args[0]);
         System.out.println("Pfannkuchen("+n+") = "+fannkuch(n));
     }
