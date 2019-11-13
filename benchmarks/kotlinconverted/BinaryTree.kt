@@ -1,15 +1,23 @@
 package benchmarks.kotlinconverted
 
-import com.sun.source.tree.Tree
+import benchmarkhandle.BenchmarkHandler
+import benchmarkhandle.BenchmarkMetric
+import benchmarks.BaseBenchmark
 
-
-object BinaryTree {
+object BinaryTree : BaseBenchmark() {
 
     private val minDepth = 8
 
     @JvmStatic
     fun main(args: Array<String>) {
+        val binaryTree = BinaryTree
+        val benchmarkHandler = BenchmarkHandler()
+        for (i in 0 until 10) {
+            benchmarkHandler.startMeasuringMetrics(BenchmarkMetric.EXECUTIONTIME, binaryTree, args)
+        }
+    }
 
+    override fun initAlgorithm(args: Array<String>) {
         var n = 0
         if (args.size > 0) n = Integer.parseInt(args[0])
 
@@ -17,7 +25,7 @@ object BinaryTree {
         val stretchDepth = maxDepth + 1
 
         var check = TreeNode.bottomUpTree(stretchDepth).itemCheck()
-        println("stretch tree of depth $stretchDepth\t check: $check")
+        //   println("stretch tree of depth $stretchDepth\t check: $check")
 
         val longLivedTree = TreeNode.bottomUpTree(maxDepth)
 
@@ -29,13 +37,11 @@ object BinaryTree {
             for (i in 1..iterations) {
                 check += TreeNode.bottomUpTree(depth).itemCheck()
             }
-            println("$iterations\t trees of depth $depth\t check: $check")
+            //  println("$iterations\t trees of depth $depth\t check: $check")
             depth += 2
         }
-        println("long lived tree of depth " + maxDepth + "\t check: " + longLivedTree.itemCheck())
-
+        //  println("long lived tree of depth " + maxDepth + "\t check: " + longLivedTree.itemCheck())
     }
-
 
     private class TreeNode internal constructor(private val left: TreeNode?, private val right: TreeNode?) {
 

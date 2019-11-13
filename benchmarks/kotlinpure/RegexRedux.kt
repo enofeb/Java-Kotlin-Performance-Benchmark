@@ -1,5 +1,9 @@
 package benchmarks.kotlinpure
 
+import benchmarkhandle.BenchmarkHandler
+import benchmarkhandle.BenchmarkMetric
+import benchmarks.BaseBenchmark
+import benchmarks.kotlinconverted.RegexRedux
 import java.io.ByteArrayOutputStream
 import java.io.FileInputStream
 import java.io.IOException
@@ -7,11 +11,17 @@ import java.util.*
 import java.util.regex.Pattern
 import java.util.stream.Collectors
 
-object RegexRedux {
+object RegexRedux:BaseBenchmark() {
+
     @Throws(IOException::class)
     @JvmStatic
     fun main(args: Array<String>) {
+        val regexRedux= RegexRedux
+        val benchmarkHandler= BenchmarkHandler()
+        benchmarkHandler.startMeasuringMetrics(BenchmarkMetric.EXECUTIONTIME,regexRedux,args)
+    }
 
+    override fun initAlgorithm(args: Array<out String>?) {
         val stream = FileInputStream("/Users/enes/Documents/intelljprojects/src/regex.txt")
 
         val baos = ByteArrayOutputStream()
@@ -73,4 +83,5 @@ object RegexRedux {
         println(codeLength)
         println(buf.length)
     }
+
 }

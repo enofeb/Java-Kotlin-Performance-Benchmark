@@ -27,7 +27,7 @@ class ConvertResultToFile {
          }catch(e: IOException) {
             e.printStackTrace()
          }
-        val output = "${benchmark.resultsToString()},$fileName"
+        val output = "$fileName->${benchmark.resultsToString()}"
 
         println(output)
 

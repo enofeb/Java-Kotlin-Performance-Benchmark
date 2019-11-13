@@ -7,6 +7,9 @@ package benchmarks.kotlinconverted
    contributed by Francois Green
 */
 
+import benchmarkhandle.BenchmarkHandler
+import benchmarkhandle.BenchmarkMetric
+import benchmarks.BaseBenchmark
 import java.io.*
 
 import java.util.*
@@ -16,11 +19,17 @@ import java.util.regex.*
 
 import java.util.stream.Collectors.*
 
-object RegexRedux {
+object RegexRedux : BaseBenchmark() {
 
     @Throws(IOException::class)
     @JvmStatic
     fun main(args: Array<String>) {
+        val regexRedux=RegexRedux
+        val benchmarkHandler=BenchmarkHandler()
+        benchmarkHandler.startMeasuringMetrics(BenchmarkMetric.EXECUTIONTIME,regexRedux,args)
+    }
+
+    override fun initAlgorithm(args: Array<out String>?) {
 
         val stream = FileInputStream("/Users/enes/Documents/intelljprojects/src/regex.txt")
 
@@ -53,13 +62,13 @@ object RegexRedux {
             "agggtaa[cgt]|[acg]ttaccct"
         )
 
-        fun patternEntry(v:String,s:String):AbstractMap.SimpleEntry<String, Long>{
+        fun patternEntry(v: String, s: String): AbstractMap.SimpleEntry<String, Long> {
             val count = Pattern.compile(v).splitAsStream(s).count() - 1
             return AbstractMap.SimpleEntry<String, Long>(v, count)
         }
 
         val results = variants.parallelStream()
-            .map { variant -> patternEntry(variant,sequence) }
+            .map { variant -> patternEntry(variant, sequence) }
             .collect(toMap({ return@toMap it.key }, AbstractMap.SimpleEntry<String, Long>::value))
 
         variants.forEach { variant -> println(variant + " " + results[variant]) }

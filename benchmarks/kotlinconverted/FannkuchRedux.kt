@@ -8,9 +8,19 @@ package benchmarks.kotlinconverted
  *
  */
 
+import benchmarkhandle.BenchmarkHandler
+import benchmarkhandle.BenchmarkMetric
+import benchmarks.BaseBenchmark
 import java.util.concurrent.atomic.AtomicInteger
 
-object FannkuchRedux {
+object FannkuchRedux:BaseBenchmark(){
+
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val fannkuchRedux=FannkuchRedux
+        val benchmarkHandler=BenchmarkHandler()
+        benchmarkHandler.startMeasuringMetrics(BenchmarkMetric.EXECUTIONTIME, fannkuchRedux, args)
+    }
     fun fannkuch(n: Int): Int {
         val perm = IntArray(n)
         val perm1 = IntArray(n)
@@ -70,9 +80,7 @@ object FannkuchRedux {
             permCount++
         }
     }
-
-    @JvmStatic
-    fun main(args: Array<String>) {
+    override fun initAlgorithm(args: Array<String>) {
         var n = 7
         if (args.size > 0) n = Integer.parseInt(args[0])
         println("Pfannkuchen(" + n + ") = " + fannkuch(n))

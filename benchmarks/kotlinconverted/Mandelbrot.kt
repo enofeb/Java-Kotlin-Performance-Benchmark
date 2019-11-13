@@ -6,11 +6,22 @@ package benchmarks.kotlinconverted
    modified by Henco Appel
 */
 
+import benchmarkhandle.BenchmarkHandler
+import benchmarkhandle.BenchmarkMetric
+import benchmarks.BaseBenchmark
 import java.io.*
 import java.util.concurrent.atomic.*
 import java.util.stream.*
 
-internal object Mandelbrot {
+internal object Mandelbrot:BaseBenchmark() {
+
+    @Throws(Exception::class)
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val mandelbrot=Mandelbrot
+        val benchmarkHandler=BenchmarkHandler()
+        benchmarkHandler.startMeasuringMetrics(BenchmarkMetric.EXECUTIONTIME,mandelbrot,args)
+    }
 
     fun getByte(Crb: DoubleArray, CibY: Double, x: Int): Byte {
         var res = 0
@@ -48,9 +59,7 @@ internal object Mandelbrot {
         return (res xor -1).toByte()
     }
 
-    @Throws(Exception::class)
-    @JvmStatic
-    fun main(args: Array<String>) {
+    override fun initAlgorithm(args: Array<String>) {
         var N = 6000
         if (args.size >= 1)
             N = Integer.parseInt(args[0])

@@ -7,6 +7,10 @@
 
 package benchmarks.java;
 
+import benchmarkhandle.BenchmarkHandler;
+import benchmarkhandle.BenchmarkMetric;
+import benchmarks.BaseBenchmark;
+
 import java.io.*;
 
 import java.util.*;
@@ -16,17 +20,23 @@ import java.util.regex.*;
 
 import static java.util.stream.Collectors.*;
 
-public class RegexRedux {
+public class RegexRedux extends BaseBenchmark {
 
     public static void main(String[] args) throws IOException {
+        RegexRedux regexRedux=new RegexRedux();
+        BenchmarkHandler benchmarkHandler=new BenchmarkHandler();
+        benchmarkHandler.startMeasuringMetrics(BenchmarkMetric.EXECUTIONTIME,regexRedux,args);
+    }
 
+    @Override
+    public void initAlgorithm(String[] args) throws Exception {
         InputStream stream = new FileInputStream("/Users/enes/Documents/intelljprojects/src/regex.txt");
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         {
             byte[] buf = new byte[65536];
             int count;
-           while ((count = stream.read(buf)) > 0) {
+            while ((count = stream.read(buf)) > 0) {
                 baos.write(buf, 0, 10245);
 
             }

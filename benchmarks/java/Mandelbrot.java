@@ -6,11 +6,21 @@ package benchmarks.java;
    modified by Henco Appel
 */
 
+import benchmarkhandle.BenchmarkHandler;
+import benchmarkhandle.BenchmarkMetric;
+import benchmarks.BaseBenchmark;
+
 import java.io.*;
 import java.util.concurrent.atomic.*;
 import java.util.stream.*;
 
-public class Mandelbrot {
+public class Mandelbrot extends BaseBenchmark {
+
+    public static void main(String[] args) throws Exception {
+        Mandelbrot mandelbrot=new Mandelbrot();
+        BenchmarkHandler benchmarkHandler=new BenchmarkHandler();
+        benchmarkHandler.startMeasuringMetrics(BenchmarkMetric.EXECUTIONTIME,mandelbrot,args);
+    }
 
     static final byte getByte(final double[] Crb, final double CibY, final int x){
         int res=0;
@@ -39,7 +49,8 @@ public class Mandelbrot {
         return (byte)(res^-1);
     }
 
-    public static void main(String[] args) throws Exception {
+    @Override
+    public void initAlgorithm(String[] args) throws Exception {
         int N=6000;
         if (args.length>=1)
             N=Integer.parseInt(args[0]);
@@ -61,5 +72,6 @@ public class Mandelbrot {
         stream.write(data);
         stream.close();
     }
+
 }
 

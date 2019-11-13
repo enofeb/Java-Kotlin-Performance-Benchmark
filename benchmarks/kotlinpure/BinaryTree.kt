@@ -1,14 +1,23 @@
 package benchmarks.kotlinpure
 
-object BinaryTree {
+import benchmarkhandle.BenchmarkHandler
+import benchmarkhandle.BenchmarkMetric
+import benchmarks.BaseBenchmark
 
-    private val minDepth = 4
-    //private lateinit var treeNode:TreeNode
+object BinaryTree : BaseBenchmark() {
 
+    private val minDepth = 8
 
     @JvmStatic
     fun main(args: Array<String>) {
+        val binaryTree = BinaryTree
+        val benchmarkHandler = BenchmarkHandler()
+        for (i in 0 until 10) {
+            benchmarkHandler.startMeasuringMetrics(BenchmarkMetric.EXECUTIONTIME, binaryTree, args)
+        }
+    }
 
+    override fun initAlgorithm(args: Array<String>) {
         var n = 0
         if (args.size > 0) n = Integer.parseInt(args[0])
 
@@ -33,9 +42,7 @@ object BinaryTree {
             depth += 2
         }
         println("long lived tree of depth " + maxDepth + "\t check: " + longLivedTree.itemCheck())
-
     }
-
 
     private class TreeNode internal constructor(private val left: TreeNode?, private val right: TreeNode?) {
 

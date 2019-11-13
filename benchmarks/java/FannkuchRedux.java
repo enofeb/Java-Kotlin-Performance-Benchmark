@@ -8,10 +8,21 @@ package benchmarks.java;
  *
  */
 
-import java.util.concurrent.atomic.AtomicInteger;
+import benchmarkhandle.BenchmarkHandler;
+import benchmarkhandle.BenchmarkMetric;
+import benchmarks.BaseBenchmark;
 
-public  class FannkuchRedux
+public  class FannkuchRedux extends BaseBenchmark
 {
+
+    public static void main(String[] args){
+        FannkuchRedux fannkuchRedux=new FannkuchRedux();
+        BenchmarkHandler benchmarkHandler = new BenchmarkHandler();
+      //  for (int i = 0; i < 50; i++) {
+            benchmarkHandler.startMeasuringMetrics(BenchmarkMetric.EXECUTIONTIME, fannkuchRedux, args);
+       // }
+    }
+
     public static int fannkuch(int n) {
         int[] perm = new int[n];
         int[] perm1 = new int[n];
@@ -73,7 +84,8 @@ public  class FannkuchRedux
         }
     }
 
-    public static void main(String[] args){
+    @Override
+    public void initAlgorithm(String[] args) {
         int n = 7;
         if (args.length > 0) n = Integer.parseInt(args[0]);
         System.out.println("Pfannkuchen("+n+") = "+fannkuch(n));

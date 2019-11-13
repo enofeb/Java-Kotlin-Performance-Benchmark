@@ -42,9 +42,9 @@ class BenchmarkHandler {
         var benchmarkResult:BaseBenchmarkResult?=null
         when(benchmarkMetric){
             BenchmarkMetric.EXECUTIONTIME->{
-                val startTime=System.nanoTime()
+                val startTime=System.currentTimeMillis()
                 baseBenchmark.initAlgorithm(args)
-                val endTime=System.nanoTime()
+                val endTime=System.currentTimeMillis()
                 benchmarkResult=ExecutionTimeResult(endTime-startTime)
                 convertResultToFile.writeResultToFile(benchmarkResult,"Binary Tree")
             }
@@ -59,7 +59,6 @@ class BenchmarkHandler {
                 actualMemUsed = afterUsedMem - beforeUsedMem
                 benchmarkResult=MemoryResult(actualMemUsed,beforeUsedMem,afterUsedMem)
                 convertResultToFile.writeResultToFile(benchmarkResult,"Binary Tree")
-
             }
             BenchmarkMetric.GARBAGE_COLLECTION->{
                // System.gc()

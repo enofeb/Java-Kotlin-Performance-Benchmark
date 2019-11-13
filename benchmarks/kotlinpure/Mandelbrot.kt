@@ -1,13 +1,25 @@
 package benchmarks.kotlinpure
 
+import benchmarkhandle.BenchmarkHandler
+import benchmarkhandle.BenchmarkMetric
+import benchmarks.BaseBenchmark
+import benchmarks.kotlinconverted.Mandelbrot
 import java.io.BufferedOutputStream
 import java.util.concurrent.atomic.AtomicInteger
 
-object Mandelbrot {
+object Mandelbrot:BaseBenchmark() {
     internal var out: Array<ByteArray> = arrayOf()
     internal var yCt: AtomicInteger = AtomicInteger()
     internal var Crb: DoubleArray = doubleArrayOf()
     internal var Cib: DoubleArray = doubleArrayOf()
+
+    @Throws(Exception::class)
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val mandelbrot= Mandelbrot
+        val benchmarkHandler= BenchmarkHandler()
+        benchmarkHandler.startMeasuringMetrics(BenchmarkMetric.EXECUTIONTIME,mandelbrot,args)
+    }
 
     internal fun getByte(x: Int, y: Int): Int {
         var res = 0
@@ -52,9 +64,7 @@ object Mandelbrot {
             line[xb] = getByte(xb * 8, y).toByte()
     }
 
-    @Throws(Exception::class)
-    @JvmStatic
-    fun main(args: Array<String>) {
+    override fun initAlgorithm(args: Array<String>) {
         var N = 6000
         if (args.size >= 1) N = Integer.parseInt(args[0])
 
