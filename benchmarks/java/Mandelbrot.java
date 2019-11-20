@@ -6,8 +6,7 @@ package benchmarks.java;
    modified by Henco Appel
 */
 
-import benchmarkhandle.BenchmarkHandler;
-import benchmarkhandle.BenchmarkMetric;
+import benchmarkhandle.*;
 import benchmarks.BaseBenchmark;
 
 import java.io.*;
@@ -19,7 +18,10 @@ public class Mandelbrot extends BaseBenchmark {
     public static void main(String[] args) throws Exception {
         Mandelbrot mandelbrot=new Mandelbrot();
         BenchmarkHandler benchmarkHandler=new BenchmarkHandler();
-        benchmarkHandler.startMeasuringMetrics(BenchmarkMetric.EXECUTIONTIME,mandelbrot,args);
+        BenchmarkMessage benchmarkMessage = new BenchmarkMessage(BenchmarkType.MANDELBROT, BenchmarkImplementation.JAVA, BenchmarkMetric.GARBAGE_COLLECTION);
+        for (int i = 0; i < 10; i++) {
+            benchmarkHandler.startMeasuringMetrics(benchmarkMessage, mandelbrot, args);
+        }
     }
 
     static final byte getByte(final double[] Crb, final double CibY, final int x){

@@ -1,7 +1,6 @@
 package benchmarks.kotlinpure
 
-import benchmarkhandle.BenchmarkHandler
-import benchmarkhandle.BenchmarkMetric
+import benchmarkhandle.*
 import benchmarks.BaseBenchmark
 import benchmarks.kotlinconverted.RegexRedux
 import java.io.ByteArrayOutputStream
@@ -18,7 +17,8 @@ object RegexRedux:BaseBenchmark() {
     fun main(args: Array<String>) {
         val regexRedux= RegexRedux
         val benchmarkHandler= BenchmarkHandler()
-        benchmarkHandler.startMeasuringMetrics(BenchmarkMetric.EXECUTIONTIME,regexRedux,args)
+        val benchmarkMessage= BenchmarkMessage(BenchmarkType.BINARYTREE, BenchmarkImplementation.KOTLIN_PURE,BenchmarkMetric.MEMORY_CONSUMPTION)
+        benchmarkHandler.startMeasuringMetrics(benchmarkMessage,regexRedux,args)
     }
 
     override fun initAlgorithm(args: Array<out String>?) {

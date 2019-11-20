@@ -7,8 +7,7 @@ package benchmarks.kotlinconverted
    contributed by Francois Green
 */
 
-import benchmarkhandle.BenchmarkHandler
-import benchmarkhandle.BenchmarkMetric
+import benchmarkhandle.*
 import benchmarks.BaseBenchmark
 import java.io.*
 
@@ -26,7 +25,9 @@ object RegexRedux : BaseBenchmark() {
     fun main(args: Array<String>) {
         val regexRedux=RegexRedux
         val benchmarkHandler=BenchmarkHandler()
-        benchmarkHandler.startMeasuringMetrics(BenchmarkMetric.EXECUTIONTIME,regexRedux,args)
+        val benchmarkMessage= BenchmarkMessage(BenchmarkType.FANNKUCH_REDUX, BenchmarkImplementation.KOTLIN_CONVERTED,BenchmarkMetric.MEMORY_CONSUMPTION)
+
+          benchmarkHandler.startMeasuringMetrics(benchmarkMessage,regexRedux,args)
     }
 
     override fun initAlgorithm(args: Array<out String>?) {

@@ -1,7 +1,4 @@
 package benchmarks.kotlinpure
-
-
-
 /*
  * The Computer Language Benchmarks Game
  * https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
@@ -10,10 +7,8 @@ package benchmarks.kotlinpure
  *
  */
 
-import benchmarkhandle.BenchmarkHandler
-import benchmarkhandle.BenchmarkMetric
+import benchmarkhandle.*
 import benchmarks.BaseBenchmark
-import java.util.concurrent.atomic.AtomicInteger
 
 object FannkuchRedux:BaseBenchmark(){
 
@@ -21,7 +16,11 @@ object FannkuchRedux:BaseBenchmark(){
     fun main(args: Array<String>) {
         val fannkuchRedux=FannkuchRedux
         val benchmarkHandler= BenchmarkHandler()
-        benchmarkHandler.startMeasuringMetrics(BenchmarkMetric.EXECUTIONTIME, fannkuchRedux, args)
+        val benchmarkMessage=
+            BenchmarkMessage(BenchmarkType.BINARYTREE, BenchmarkImplementation.KOTLIN_PURE,BenchmarkMetric.MEMORY_CONSUMPTION)
+      //  for (i in 0 until 1300){
+            benchmarkHandler.startMeasuringMetrics(benchmarkMessage, fannkuchRedux, args)
+       // }
     }
     fun fannkuch(n: Int): Pair<Int, Int> {
         val permutation = IntArray(n) { it } //Ascending array of n elements

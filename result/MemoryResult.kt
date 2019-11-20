@@ -1,8 +1,8 @@
 package result
 
-class MemoryResult( val mBytesPerObject: Long,val mAllocationSizeTotal: Long, val mAllocationSizeFree: Long):BaseBenchmarkResult(){
+class MemoryResult( val actualMemorySize: Long,val beforeMemorySize: Long, val afterMemorySize: Long,val index:Int):BaseBenchmarkResult(){
     override fun resultsToString(): String {
-        val resultString = "Actual Used Memory: $mBytesPerObject, Before Memory: $mAllocationSizeTotal, After Memory:$mAllocationSizeFree"
+        val resultString = "$index.($actualMemorySize,$beforeMemorySize,$afterMemorySize)"
         return resultString
     }
 }

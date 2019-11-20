@@ -8,8 +8,7 @@ package benchmarks.kotlinconverted
  *
  */
 
-import benchmarkhandle.BenchmarkHandler
-import benchmarkhandle.BenchmarkMetric
+import benchmarkhandle.*
 import benchmarks.BaseBenchmark
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -19,7 +18,10 @@ object FannkuchRedux:BaseBenchmark(){
     fun main(args: Array<String>) {
         val fannkuchRedux=FannkuchRedux
         val benchmarkHandler=BenchmarkHandler()
-        benchmarkHandler.startMeasuringMetrics(BenchmarkMetric.EXECUTIONTIME, fannkuchRedux, args)
+        val benchmarkMessage=BenchmarkMessage(BenchmarkType.FANNKUCH_REDUX, BenchmarkImplementation.KOTLIN_CONVERTED,BenchmarkMetric.MEMORY_CONSUMPTION)
+        for (i in 0 until 100) {
+            benchmarkHandler.startMeasuringMetrics(benchmarkMessage , fannkuchRedux, args)
+        }
     }
     fun fannkuch(n: Int): Int {
         val perm = IntArray(n)

@@ -8,8 +8,7 @@ package benchmarks.java;
  *
  */
 
-import benchmarkhandle.BenchmarkHandler;
-import benchmarkhandle.BenchmarkMetric;
+import benchmarkhandle.*;
 import benchmarks.BaseBenchmark;
 
 public  class FannkuchRedux extends BaseBenchmark
@@ -18,9 +17,11 @@ public  class FannkuchRedux extends BaseBenchmark
     public static void main(String[] args){
         FannkuchRedux fannkuchRedux=new FannkuchRedux();
         BenchmarkHandler benchmarkHandler = new BenchmarkHandler();
-      //  for (int i = 0; i < 50; i++) {
-            benchmarkHandler.startMeasuringMetrics(BenchmarkMetric.EXECUTIONTIME, fannkuchRedux, args);
-       // }
+        BenchmarkMessage benchmarkMessage=new BenchmarkMessage(BenchmarkType.FANNKUCH_REDUX, BenchmarkImplementation.JAVA,BenchmarkMetric.MEMORY_CONSUMPTION);
+
+        for (int i = 0; i < 100; i++) {
+            benchmarkHandler.startMeasuringMetrics(benchmarkMessage, fannkuchRedux, args);
+       }
     }
 
     public static int fannkuch(int n) {

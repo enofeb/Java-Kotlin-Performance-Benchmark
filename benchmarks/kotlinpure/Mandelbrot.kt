@@ -1,7 +1,6 @@
 package benchmarks.kotlinpure
 
-import benchmarkhandle.BenchmarkHandler
-import benchmarkhandle.BenchmarkMetric
+import benchmarkhandle.*
 import benchmarks.BaseBenchmark
 import benchmarks.kotlinconverted.Mandelbrot
 import java.io.BufferedOutputStream
@@ -18,7 +17,11 @@ object Mandelbrot:BaseBenchmark() {
     fun main(args: Array<String>) {
         val mandelbrot= Mandelbrot
         val benchmarkHandler= BenchmarkHandler()
-        benchmarkHandler.startMeasuringMetrics(BenchmarkMetric.EXECUTIONTIME,mandelbrot,args)
+        val benchmarkMessage= BenchmarkMessage(BenchmarkType.FANNKUCH_REDUX, BenchmarkImplementation.KOTLIN_PURE,BenchmarkMetric.MEMORY_CONSUMPTION)
+
+        for (i in 0 until 9) {
+            benchmarkHandler.startMeasuringMetrics(benchmarkMessage, mandelbrot, args)
+        }
     }
 
     internal fun getByte(x: Int, y: Int): Int {
@@ -78,7 +81,7 @@ object Mandelbrot:BaseBenchmark() {
         yCt = AtomicInteger()
         out = Array(N) { ByteArray((N + 7) / 8) }
 
-        val pool = arrayOfNulls<Thread>(2 * Runtime.getRuntime().availableProcessors())
+        /*val pool = arrayOfNulls<Thread>(2 * Runtime.getRuntime().availableProcessors())
         for (i in pool.indices)
             pool[i] = object : Thread() {
                 override fun run() {
@@ -90,11 +93,11 @@ object Mandelbrot:BaseBenchmark() {
                 }
             }
         for (t in pool) t!!.start()
-        for (t in pool) t!!.join()
+        for (t in pool) t!!.join()*/
 
         val stream = BufferedOutputStream(System.out)
         stream.write("P4\n$N $N\n".toByteArray())
         for (i in 0 until N) stream.write(out[i])
-        stream.close()
+       stream.close()
     }
 }

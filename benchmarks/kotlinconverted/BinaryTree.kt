@@ -1,7 +1,6 @@
 package benchmarks.kotlinconverted
 
-import benchmarkhandle.BenchmarkHandler
-import benchmarkhandle.BenchmarkMetric
+import benchmarkhandle.*
 import benchmarks.BaseBenchmark
 
 object BinaryTree : BaseBenchmark() {
@@ -12,9 +11,11 @@ object BinaryTree : BaseBenchmark() {
     fun main(args: Array<String>) {
         val binaryTree = BinaryTree
         val benchmarkHandler = BenchmarkHandler()
+        val benchmarkMessage=BenchmarkMessage(BenchmarkType.BINARYTREE, BenchmarkImplementation.KOTLIN_CONVERTED,BenchmarkMetric.MEMORY_CONSUMPTION)
         for (i in 0 until 10) {
-            benchmarkHandler.startMeasuringMetrics(BenchmarkMetric.EXECUTIONTIME, binaryTree, args)
+            benchmarkHandler.startMeasuringMetrics(benchmarkMessage, binaryTree, args)
         }
+      //  System.gc()
     }
 
     override fun initAlgorithm(args: Array<String>) {

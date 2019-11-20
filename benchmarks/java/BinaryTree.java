@@ -1,38 +1,26 @@
 package benchmarks.java;
 
 
-import benchmarkhandle.BenchmarkHandler;
-import benchmarkhandle.BenchmarkMetric;
+import benchmarkhandle.*;
 import benchmarks.BaseBenchmark;
 
-import java.util.logging.LogRecord;
 
 public class BinaryTree extends BaseBenchmark {
 
     private final static int minDepth = 8;
 
+
     public static void main(String[] args) {
         BinaryTree binaryTree = new BinaryTree();
-        BinaryTree binaryTreeMem = new BinaryTree();
-
         BenchmarkHandler benchmarkHandler = new BenchmarkHandler();
-        //Allocate in memory heap
-        BenchmarkHandler benchmarkHandlerMem = new BenchmarkHandler();
-
+        BenchmarkMessage benchmarkMessage = new BenchmarkMessage(BenchmarkType.BINARYTREE, BenchmarkImplementation.JAVA, BenchmarkMetric.GARBAGE_COLLECTION);
         for (int i = 0; i < 10; i++) {
-            benchmarkHandler.startMeasuringMetrics(BenchmarkMetric.EXECUTIONTIME, binaryTree, args);
+            benchmarkHandler.startMeasuringMetrics(benchmarkMessage, binaryTree, args);
         }
-        // System.gc();
-        //  benchmarkHandlerMem.startMeasuringMetrics(BenchmarkMetric.MEMORY_CONSUMPTION,binaryTreeMem,args);
-
     }
 
 
     public void initAlgorithm(String[] args) {
-        // long startTime,endTime;
-        //  startTime=System.nanoTime();
-        //    long beforeUsedMem,afterUsedMem,actualMemUsed;
-        //    beforeUsedMem=Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
 
         int n = 0;
         if (args.length > 0) n = Integer.parseInt(args[0]);
@@ -43,8 +31,7 @@ public class BinaryTree extends BaseBenchmark {
         int stretchDepth = maxDepth + 1;
 
         int check = (TreeNode.bottomUpTree(stretchDepth)).itemCheck();
-        // System.out.println("stretch tree of depth "+stretchDepth+"\t check: " + check);
-        ////////////////////////////////CUT BEFORE
+        System.out.println("stretch tree of depth " + stretchDepth + "\t check: " + check);
 
         TreeNode longLivedTree = TreeNode.bottomUpTree(maxDepth);
 
@@ -55,15 +42,9 @@ public class BinaryTree extends BaseBenchmark {
             for (int i = 1; i <= iterations; i++) {
                 check += (TreeNode.bottomUpTree(depth)).itemCheck();
             }
-            //  System.out.println(iterations + "\t trees of depth " + depth + "\t check: " + check);
+            System.out.println(iterations + "\t trees of depth " + depth + "\t check: " + check);
         }
-        //  System.out.println("long lived tree of depth " + maxDepth + "\t check: "+ longLivedTree.itemCheck());
-
-        //  afterUsedMem=Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
-        //   actualMemUsed=afterUsedMem-beforeUsedMem;
-        //    endTime=System.nanoTime();
-        //  System.out.println(actualMemUsed);
-
+        System.out.println("long lived tree of depth " + maxDepth + "\t check: " + longLivedTree.itemCheck());
     }
 
     private static class TreeNode {

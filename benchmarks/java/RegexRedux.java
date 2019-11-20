@@ -7,8 +7,7 @@
 
 package benchmarks.java;
 
-import benchmarkhandle.BenchmarkHandler;
-import benchmarkhandle.BenchmarkMetric;
+import benchmarkhandle.*;
 import benchmarks.BaseBenchmark;
 
 import java.io.*;
@@ -25,7 +24,8 @@ public class RegexRedux extends BaseBenchmark {
     public static void main(String[] args) throws IOException {
         RegexRedux regexRedux=new RegexRedux();
         BenchmarkHandler benchmarkHandler=new BenchmarkHandler();
-        benchmarkHandler.startMeasuringMetrics(BenchmarkMetric.EXECUTIONTIME,regexRedux,args);
+        BenchmarkMessage benchmarkMessage = new BenchmarkMessage(BenchmarkType.BINARYTREE, BenchmarkImplementation.JAVA, BenchmarkMetric.GARBAGE_COLLECTION);
+        benchmarkHandler.startMeasuringMetrics(benchmarkMessage,regexRedux,args);
     }
 
     @Override

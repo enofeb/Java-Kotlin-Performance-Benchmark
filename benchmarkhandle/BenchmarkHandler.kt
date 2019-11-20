@@ -1,54 +1,38 @@
 package benchmarkhandle
 
-import jdk.nashorn.api.tree.DebuggerTree
 import result.BaseBenchmarkResult
 import result.ExecutionTimeResult
 import result.MemoryResult
-import ConvertResultToFile
+import result.ConvertResultToFile
 import benchmarks.BaseBenchmark
-import javax.swing.DebugGraphics
-import benchmarks.java.Mandelbrot as MandelbrotJava
-import benchmarks.kotlinconverted.Mandelbrot as MandelbrotKotlinConverted
-import benchmarks.kotlinpure.Mandelbrot as MandelbrotKotlinPure
-
-
-import benchmarks.java.FannkuchRedux as FannkuchReduxJava
-import benchmarks.kotlinconverted.FannkuchRedux as FannkuchReduxKotlinConverted
-import benchmarks.kotlinpure.FannkuchRedux as FannkuchReduxKotlinPure
-
-import benchmarks.java.BinaryTree as BinaryTreeJava
-import benchmarks.kotlinconverted.BinaryTree as BinaryTreeKotlinConverted
-import benchmarks.kotlinpure.BinaryTree as BinaryTreeKotlinPure
-
 
 class BenchmarkHandler {
-    private val binaryTreeJava=BinaryTreeJava()
-    private val binaryTreeKotlinConverted=BinaryTreeKotlinConverted
-    private val binaryTreeKotlinPure=BinaryTreeKotlinPure
 
-    private val fannkuchReduxJava=FannkuchReduxJava()
-    private val fannkuchReduxKotlinConverted=FannkuchReduxKotlinConverted
-    private val fannkuchReduxKotlinPure=FannkuchReduxKotlinPure
+    private val convertResultToFile = ConvertResultToFile()
 
-    private val mandelbrotJava= MandelbrotJava()
-    private val mandelbrotKotlinConverted= MandelbrotKotlinConverted
-    private val mandelbrotKotlinPure= MandelbrotKotlinPure
+    private var incrementIndex = 1
 
-    private val convertResultToFile= ConvertResultToFile()
+    private var executionAverage=1
 
-  // var args: Array<String>=
+    private var resultList: MutableList<BaseBenchmarkResult>? = mutableListOf<BaseBenchmarkResult>()
 
-     fun startMeasuringMetrics(benchmarkMetric: BenchmarkMetric,baseBenchmark: BaseBenchmark, args: Array<String>){
-        var benchmarkResult:BaseBenchmarkResult?=null
-        when(benchmarkMetric){
-            BenchmarkMetric.EXECUTIONTIME->{
-                val startTime=System.currentTimeMillis()
+    private var exeTimeList: MutableList<Long>? = mutableListOf()
+    private var memoryList: MutableList<Long>? = mutableListOf()
+
+    fun startMeasuringMetrics(benchmarkMessage: BenchmarkMessage, baseBenchmark: BaseBenchmark, args: Array<String>) {
+        var benchmarkResult: BaseBenchmarkResult? = null
+        when (benchmarkMessage.metric) {
+            BenchmarkMetric.EXECUTIONTIME -> {
+                val startTime = System.currentTimeMillis()
                 baseBenchmark.initAlgorithm(args)
-                val endTime=System.currentTimeMillis()
-                benchmarkResult=ExecutionTimeResult(endTime-startTime)
-                convertResultToFile.writeResultToFile(benchmarkResult,"Binary Tree")
+                val endTime = System.currentTimeMillis()
+                val executionTime = endTime.minus(startTime)
+                exeTimeList!!.add(executionTime)
+                benchmarkResult = ExecutionTimeResult(executionTime, incrementIndex++)
+                resultList!!.add(benchmarkResult)
+                triggerBenchmark(benchmarkMessage.type,benchmarkMessage.implementation,resultList!!,benchmarkResult,exeTimeList!!)
             }
-            BenchmarkMetric.MEMORY_CONSUMPTION->{
+            BenchmarkMetric.MEMORY_CONSUMPTION -> {
                 // get the total memory
                 val beforeUsedMem: Long
                 val afterUsedMem: Long
@@ -57,31 +41,79 @@ class BenchmarkHandler {
                 baseBenchmark.initAlgorithm(args)
                 afterUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()
                 actualMemUsed = afterUsedMem - beforeUsedMem
-                benchmarkResult=MemoryResult(actualMemUsed,beforeUsedMem,afterUsedMem)
-                convertResultToFile.writeResultToFile(benchmarkResult,"Binary Tree")
+                memoryList!!.add(actualMemUsed)
+                benchmarkResult = MemoryResult(actualMemUsed, beforeUsedMem, afterUsedMem, incrementIndex++)
+                resultList!!.add(benchmarkResult)
+                triggerBenchmark(benchmarkMessage.type,benchmarkMessage.implementation,resultList!!,benchmarkResult,memoryList!!)
             }
-            BenchmarkMetric.GARBAGE_COLLECTION->{
-               // System.gc()
-               // var dd= Runtime.getRuntime().gc()
-                // Will execute on command
+            BenchmarkMetric.GARBAGE_COLLECTION -> {
+                baseBenchmark.initAlgorithm(args)
+                System.gc()
+                GcLogUtil.startLoggingGc()
             }
         }
     }
 
-    private fun activateBenchmark(benchmarkType: BenchmarkType, benchmarkImplementation: BenchmarkImplementation){
-        when(benchmarkType){
-            BenchmarkType.BINARYTREE->{
-                when(benchmarkImplementation){
-                    BenchmarkImplementation.JAVA->{
-                   //   convertResultToFile.writeResultToFile(,"dd")
+    private fun triggerBenchmark(
+        benchmarkType: BenchmarkType,
+        benchmarkImplementation: BenchmarkImplementation,
+        resultList: MutableList<BaseBenchmarkResult>,
+        benchmarkResult: BaseBenchmarkResult,
+        exeList: MutableList<Long>
+    ) {
+        when (benchmarkType) {
+            BenchmarkType.BINARYTREE -> {
+                when (benchmarkImplementation) {
+                    BenchmarkImplementation.JAVA -> {
+                        convertResultToFile.writeResultToFile(resultList!!, "Binary Tree Java", benchmarkResult,exeList)
                     }
-                    BenchmarkImplementation.KOTLIN_CONVERTED->{}
-                    BenchmarkImplementation.KOTLIN_PURE->{}
+                    BenchmarkImplementation.KOTLIN_CONVERTED -> {
+                       // convertResultToFile.writeResultToFile(resultList!!, "Binary Tree Kotlin-Converted", benchmarkResult)
+                    }
+                    BenchmarkImplementation.KOTLIN_PURE -> {
+                      //  convertResultToFile.writeResultToFile(resultList!!, "Binary Tree Kotlin-Pure", benchmarkResult)
+                    }
                 }
             }
-            BenchmarkType.FANNKUCH_REDUX->{}
-            BenchmarkType.MANDELBROT->{}
-            BenchmarkType.REGEX_REDUX->{}
+            BenchmarkType.FANNKUCH_REDUX -> {
+                when (benchmarkImplementation) {
+                    BenchmarkImplementation.JAVA -> {
+                      //  convertResultToFile.writeResultToFile(resultList!!, "Fannkuch Redux Java", benchmarkResult)
+                    }
+                    BenchmarkImplementation.KOTLIN_CONVERTED -> {
+                      //  convertResultToFile.writeResultToFile(resultList!!, "Fannkuch Redux Kotlin-Converted", benchmarkResult)
+                    }
+                    BenchmarkImplementation.KOTLIN_PURE -> {
+                      //  convertResultToFile.writeResultToFile(resultList!!, "Fannkuch Redux Kotlin-Pure", benchmarkResult)
+                    }
+                }
+            }
+            BenchmarkType.MANDELBROT -> {
+                when (benchmarkImplementation) {
+                    BenchmarkImplementation.JAVA -> {
+                      //  convertResultToFile.writeResultToFile(resultList!!, "Mandelbrot Java", benchmarkResult)
+                    }
+                    BenchmarkImplementation.KOTLIN_CONVERTED -> {
+                    //    convertResultToFile.writeResultToFile(resultList!!, "Mandelbrot Kotlin Converted", benchmarkResult)
+                    }
+                    BenchmarkImplementation.KOTLIN_PURE -> {
+                    //    convertResultToFile.writeResultToFile(resultList!!, "Mandelbrot Kotlin Pure", benchmarkResult)
+                    }
+                }
+            }
+            BenchmarkType.REGEX_REDUX -> {
+                when (benchmarkImplementation) {
+                    BenchmarkImplementation.JAVA -> {
+                     //   convertResultToFile.writeResultToFile(resultList!!, "Regex Redux Java", benchmarkResult)
+                    }
+                    BenchmarkImplementation.KOTLIN_CONVERTED -> {
+                       // convertResultToFile.writeResultToFile(resultList!!, "Regex Redux Kotlin Converted", benchmarkResult)
+                    }
+                    BenchmarkImplementation.KOTLIN_PURE -> {
+                      //  convertResultToFile.writeResultToFile(resultList!!, "Regex Redux Kotlin Pure", benchmarkResult)
+                    }
+                }
+            }
         }
     }
 

@@ -6,8 +6,7 @@ package benchmarks.kotlinconverted
    modified by Henco Appel
 */
 
-import benchmarkhandle.BenchmarkHandler
-import benchmarkhandle.BenchmarkMetric
+import benchmarkhandle.*
 import benchmarks.BaseBenchmark
 import java.io.*
 import java.util.concurrent.atomic.*
@@ -20,7 +19,10 @@ internal object Mandelbrot:BaseBenchmark() {
     fun main(args: Array<String>) {
         val mandelbrot=Mandelbrot
         val benchmarkHandler=BenchmarkHandler()
-        benchmarkHandler.startMeasuringMetrics(BenchmarkMetric.EXECUTIONTIME,mandelbrot,args)
+        val benchmarkMessage= BenchmarkMessage(BenchmarkType.FANNKUCH_REDUX, BenchmarkImplementation.KOTLIN_CONVERTED,BenchmarkMetric.MEMORY_CONSUMPTION)
+        for (i in 0..9) {
+            benchmarkHandler.startMeasuringMetrics(benchmarkMessage, mandelbrot, args)
+        }
     }
 
     fun getByte(Crb: DoubleArray, CibY: Double, x: Int): Byte {

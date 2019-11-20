@@ -1,9 +1,9 @@
 package result
 
-class ExecutionTimeResult(val executionTime:Long):BaseBenchmarkResult(){
-    //NANOTIME TYPE RESULT
+class ExecutionTimeResult(val executionTime:Long,val index:Int):BaseBenchmarkResult(){
+    //MILLISECOND TYPE RESULT
     override fun resultsToString(): String {
-        val resultString = "Execution Time Sum:$executionTime"
+        val resultString = "$index.($executionTime)"
         return resultString
     }
 }
